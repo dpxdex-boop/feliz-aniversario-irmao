@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Feliz Aniversário 🎉</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    position: relative;
+}
+
+.content {
+    position: absolute;
+    top: 60px;
+    bottom: 60px;
+    left: 60px;
+    right: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page {
+    display: none;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.active {
+    display: block;
+}
+
+.progress {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+.bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.3);
+}
+
+.fill {
+    height: 100%;
+    width: 0%;
+    background: white;
+}
+
+.fim {
+    display: none;
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 28px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 50%;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.left {
+    left: 10px;
+}
+
+.right {
+    right: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container"
+     onmousedown="pauseStory()"
+     onmouseup="resumeStory()"
+     ontouchstart="pauseStory()"
+     ontouchend="resumeStory()">
+
+<div class="progress" id="progress"></div>
+
+<div class="content">
+
+<div class="page active">
+Irmão, essa mensagem é pra você 🎉<br><br>
+Hoje é um dia muito especial,<br>
+porque é o dia em que nasceu alguém incrível.<br>
+Quero que você saiba o quanto você é importante pra mim,<br>
+e o quanto eu sou grato por ter você na minha vida.
+</div>
+
+<!-- 🔥 MENSAGEM NOVA AQUI -->
+<div class="page">
+A nossa história juntos é cheia de momentos inesquecíveis,<br>
+cada risada, cada conversa e até cada zoeira nossa,<br>
+tudo isso faz parte de quem somos hoje.<br>
+Ter você como irmão é um presente que a vida me deu,<br>
+e eu valorizo muito isso todos os dias.
+</div>
+
+<div class="page">
+Você não é só meu irmão,<br>
+você é meu melhor amigo,<br>
+a pessoa com quem eu posso contar sempre.<br>
+Alguém que me entende,<br>
+e que faz meus dias melhores.
+</div>
+
+<div class="page">
+Eu te desejo muita felicidade,<br>
+muita saúde e muito sucesso na sua vida.<br>
+Que você consiga conquistar todos os seus sonhos,<br>
+e nunca desista daquilo que acredita.
+</div>
+
+<div class="page">
+Que sua vida seja cheia de momentos bons,<br>
+de conquistas e vitórias,<br>
+e que nunca falte alegria no seu caminho.<br>
+Você merece tudo de melhor.
+</div>
+
+<div class="page">
+Saiba que eu sempre estarei ao seu lado,<br>
+pra te apoiar, te ajudar,<br>
+e comemorar cada vitória sua.<br>
+Você nunca estará sozinho.
+</div>
+
+<div class="page">
+Obrigado por ser quem você é,<br>
+por todas as risadas,<br>
+por todos os momentos que vivemos juntos.<br>
+Você é uma pessoa incrível,<br>
+e eu tenho muito orgulho de você.
+</div>
+
+<div class="page">
+Feliz aniversário, irmão 🎂<br><br>
+Que esse novo ciclo seja ainda melhor,<br>
+cheio de coisas boas,<br>
+e que todos os seus sonhos se realizem.<br><br>
+Eu te amo ❤️
+</div>
+
+</div>
+
+<div class="fim" id="fim">FIM 🎉</div>
+
+<div class="arrow left" onclick="prev()">&lt;</div>
+<div class="arrow right" onclick="next()">&gt;</div>
+
+</div>
+
+<script>
+let current = 0;
+const pages = document.querySelectorAll(".page");
+const progressContainer = document.getElementById("progress");
+const fim = document.getElementById("fim");
+
+let bars = [];
+let interval;
+let paused = false;
+let width = 0;
+
+pages.forEach(() => {
+    const bar = document.createElement("div");
+    bar.classList.add("bar");
+
+    const fill = document.createElement("div");
+    fill.classList.add("fill");
+
+    bar.appendChild(fill);
+    progressContainer.appendChild(bar);
+
+    bars.push(fill);
+});
+
+function startStory() {
+    width = 0;
+
+    interval = setInterval(() => {
+        if (!paused) {
+            width += 1.5;
+            bars[current].style.width = width + "%";
+
+            if (width >= 100) {
+                next();
+            }
+        }
+    }, 100);
+}
+
+function pauseStory() {
+    paused = true;
+}
+
+function resumeStory() {
+    paused = false;
+}
+
+function next() {
+    clearInterval(interval);
+    pages[current].classList.remove("active");
+
+    current++;
+
+    if (current >= pages.length) {
+        fim.style.display = "block";
+        return;
+    }
+
+    pages[current].classList.add("active");
+    startStory();
+}
+
+function prev() {
+    if (current === 0) return;
+
+    clearInterval(interval);
+    bars[current].style.width = "0%";
+    pages[current].classList.remove("active");
+
+    current--;
+
+    pages[current].classList.add("active");
+    startStory();
+}
+
+startStory();
+</script>
+
+</body>
+</html>
